@@ -1,11 +1,17 @@
 var ownid;
 var remotelist = "http://assets.idiomag.com/ext/network.js";
+var loaded = false;
 
 function showExchange() {
 	// locate id of extension (for exclusion)
 	ownid = chrome.extension.getURL().match(/\/\/(.*)\//)[1];
 	// load remote list of link data to include
-	loadScript(remotelist, loadAdvert);
+	if(!loaded) {
+		loadScript(remotelist + "?" + Math.random(), loadAdvert);
+	}
+	else {
+		loadAdvert();
+	}
 }
 
 function loadAdvert() {
@@ -52,6 +58,7 @@ function loadScript(url, callback){
     var script = document.createElement("script")
     script.type = "text/javascript";
 	script.onload = function(){
+		loaded = true;
 		callback();
 	};
     script.src = url;
